@@ -141,5 +141,31 @@
     }
     document.getElementById("query-string").addEventListener("keypress", (e) => { if (e.key === "Enter") submitQuery(); });
     </script>
+<script>
+function updateGridTimers() {
+    const now = new Date().getTime();
+    const preOrderTarget = new Date("Jun 25, 2026 00:00:00").getTime();
+    const launchTarget = new Date("Nov 19, 2026 00:00:00").getTime();
+    const preDist = preOrderTarget - now;
+    const launchDist = launchTarget - now;
+    if (preDist <= 0) {
+        document.getElementById("preorder-timer").innerText = "LIVE NOW";
+        document.getElementById("preorder-timer").className = "text-emerald-400 font-bold animate-pulse";
+    } else {
+        const h = Math.floor((preDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((preDist % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((preDist % (1000 * 60)) / 1000);
+        document.getElementById("preorder-timer").innerText = ;
+    }
+    if (launchDist <= 0) {
+        document.getElementById("launch-timer").innerText = "GAME LIVE";
+    } else {
+        const dL = Math.floor(launchDist / (1000 * 60 * 60 * 24));
+        document.getElementById("launch-timer").innerText = ;
+    }
+}
+setInterval(updateGridTimers, 1000);
+updateGridTimers();
+</script>
 </body>
 </html>
