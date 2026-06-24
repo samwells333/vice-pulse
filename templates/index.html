@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<div style="display: flex; justify-content: center; gap: 20px; font-family: monospace; background: #0f172a; border: 1px solid #1e293b; padding: 6px; border-radius: 9999px; font-size: 11px; margin: 10px auto; max-width: 400px;">
+    <div style="color: #94a3b8;">🚨 PRE-ORDERS: <span id="preorder-timer" style="color: #ec4899; font-weight: bold;">CALCULATING...</span></div>
+    <div style="color: #475569;">|</div>
+    <div style="color: #94a3b8;">🌴 DAYS TO VICE CITY: <span id="launch-timer" style="color: #22d3ee; font-weight: bold;">CALCULATING...</span></div>
+</div>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -169,3 +174,28 @@ updateGridTimers();
 </script>
 </body>
 </html>
+<script>
+function updateGridTimers() {
+    const now = new Date().getTime();
+    const preOrderTarget = new Date("Jun 25, 2026 00:00:00").getTime();
+    const launchTarget = new Date("Nov 19, 2026 00:00:00").getTime();
+    const preDist = preOrderTarget - now;
+    const launchDist = launchTarget - now;
+    if (preDist <= 0) {
+        document.getElementById("preorder-timer").innerText = "LIVE NOW";
+    } else {
+        const h = Math.floor((preDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((preDist % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((preDist % (1000 * 60)) / 1000);
+        document.getElementById("preorder-timer").innerText = `${h}h ${m}m ${s}s`;
+    }
+    if (launchDist <= 0) {
+        document.getElementById("launch-timer").innerText = "GAME LIVE";
+    } else {
+        const dL = Math.floor(launchDist / (1000 * 60 * 60 * 24));
+        document.getElementById("launch-timer").innerText = `${dL} DAYS`;
+    }
+}
+setInterval(updateGridTimers, 1000);
+updateGridTimers();
+</script>
