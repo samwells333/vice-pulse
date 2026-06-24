@@ -1,1 +1,3 @@
-flask\nfeedparser\ngoogle-generativeai
+flask
+feedparser
+google-generativeai
