@@ -1,3 +1,4 @@
+from flask_cors import CORS
 import os
 import urllib.request
 import json
@@ -19,7 +20,7 @@ except ModuleNotFoundError:
     import google.generativeai as genai
 
 app = Flask(__name__)
-
+CORS(app)
 # --- MONETIZATION CONFIG ---
 # In production, we keep your API key hidden in a system environment variable for security
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_BACKUP_KEY_HERE")
