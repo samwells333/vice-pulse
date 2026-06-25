@@ -106,22 +106,19 @@
 
         if (!promptText) return;
 
-        // Render User Block
         displayBox.innerHTML += `<div class="bg-purple-600 text-white p-3 rounded-l-xl rounded-br-xl max-w-[90%] ml-auto text-right">${promptText}</div>`;
         inputNode.value = "";
         displayBox.scrollTop = displayBox.scrollHeight;
 
-        // Post query string payload to Flask's production endpoint natively
-        fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: promptText })
         })
         .then(res => res.json())
         .then(data => {
             let reply = data.reply;
 
-            // Handle network/quota drops cleanly on client thread
             if (reply === "LOCAL_FALLBACK" || reply.startsWith("Error:")) {
                 document.getElementById("terminal-badge").innerText = "Local Protected";
                 document.getElementById("terminal-badge").className = "bg-amber-950 text-amber-400 border border-amber-800 px-1.5 py-0.5 rounded text-[10px]";
@@ -136,33 +133,31 @@
                 }
             }
             
-            // Render Assistant Reply Block
             displayBox.innerHTML += `<div class="bg-slate-800 border border-slate-700 text-slate-200 p-3 rounded-r-xl rounded-bl-xl max-w-[90%] mr-auto text-left mt-2">${reply}</div>`;
             displayBox.scrollTop = displayBox.scrollHeight;
         })
         .catch(err => console.log("Chat execution dropped:", err));
     }
 
-    // --- LIVE NEWS & TIMERS INTEGRATION (PASTE THIS RIGHT HERE) ---
     async function loadLiveNews() {
         try {
-            const response = await fetch('https://vice-pulse.onrender.com/api/updates');
+            const response = await fetch("https://vice-pulse.onrender.com/api/updates");
             const json = await response.json();
             
-            if (json.status === 'success') {
-                const container = document.getElementById('live-news-feed');
-                container.innerHTML = ''; 
+            if (json.status === "success") {
+                const container = document.getElementById("live-news-feed");
+                container.innerHTML = ""; 
                 
                 json.data.forEach(item => {
                     const articleHTML = `
                         <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-pink-500 p-3.5 rounded-r-xl hover:border-slate-700 transition">
-                            <h3 class="font-bold text-sm text-slate-200 line-clamp-2 mb-1.5">${item.title}</h3>
+                            <h3 class="font-bold text-sm text-slate-200 line-clamp-2 mb-1.5">\${item.title}</h3>
                             <div class="flex justify-between items-center text-xs">
-                                <a href="${item.link}" target="_blank" class="text-pink-500 hover:underline">View Intel Source →</a>
+                                <a href="\${item.link}" target="_blank" class="text-pink-500 hover:underline">View Intel Source →</a>
                             </div>
                         </div>
                     `;
-                    container.insertAdjacentHTML('beforeend', articleHTML);
+                    container.insertAdjacentHTML("beforeend", articleHTML);
                 });
             }
         } catch (error) {
@@ -184,22 +179,22 @@
             const h = Math.floor((preDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((preDist % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((preDist % (1000 * 60)) / 1000);
-            document.getElementById("preorder-timer").innerText = `${h}h ${m}m ${s}s`;
+            document.getElementById("preorder-timer").innerText = \`\${h}h \${m}m \${s}s\`;
         }
         
         if (launchDist <= 0) {
             document.getElementById("launch-timer").innerText = "GAME LIVE";
         } else {
             const dL = Math.floor(launchDist / (1000 * 60 * 60 * 24));
-            document.getElementById("launch-timer").innerText = `${dL} DAYS`;
+            document.getElementById("launch-timer").innerText = \`\${dL} DAYS\`;
         }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener("DOMContentLoaded", () => {
         loadLiveNews();
         updateGridTimers();
         setInterval(updateGridTimers, 1000);
     });
-    </script>
+</script>
 </body>
 </html>
