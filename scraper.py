@@ -28,9 +28,9 @@ def get_live_updates():
     except Exception as e:
         # Secure fallback data if the external networks are down
         return [
-            {"title": "ALERT: Pre-Orders Launch Matrix Engaged Live", "link": "#"},
-            {"title": "EXPLOIT: Tracking Inactive Database Sequences...", "link": "#"},
-            {"title": "SYSTEM: Vercel Instant Node Online", "link": "#"}
+            {"title": "ALERT: Pre-Orders Launch Matrix Engaged Live", "link": "https://www.reddit.com/r/GTA6/"},
+            {"title": "EXPLOIT: Tracking Inactive Database Sequences...", "link": "https://www.reddit.com/r/GTA6/new/"},
+            {"title": "SYSTEM: Vercel Instant Node Online", "link": "https://vercel.com"}
         ]
 
 if __name__ == "__main__":
