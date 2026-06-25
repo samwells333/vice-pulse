@@ -45,15 +45,11 @@
                 <h2 class="text-sm font-bold uppercase tracking-wider text-pink-500">Active Exploit Modules</h2>
             </div>
             <div class="space-y-3">
-                {% for glitch in data.money_glitches %}
-                <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-pink-500 p-3.5 rounded-r-xl hover:border-slate-700 transition">
-                    <h3 class="font-bold text-sm text-slate-200 line-clamp-2 mb-1.5">{{ glitch.title }}</h3>
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-slate-400">By: <strong class="text-slate-300">{{ glitch.author }}</strong></span>
-                        <a href="{{ glitch.link }}" target="_blank" class="text-pink-500 hover:underline font-bold flex items-center gap-1">Watch Guide <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
-                    </div>
+                <div class="space-y-3">
+                <div id="live-news-feed" class="space-y-3">
+                    <p style="color: #888;" class="text-xs italic">Streaming live data from matrix grid...</p>
                 </div>
-                {% endfor %}
+            </div>
             </div>
         </section>
 
@@ -176,6 +172,34 @@ function updateGridTimers() {
 }
 setInterval(updateGridTimers, 1000);
 updateGridTimers();
+</script>
+<script>
+async function loadLiveNews() {
+    try {
+        const response = await fetch('https://vice-pulse.onrender.com/api/updates');
+        const json = await response.json();
+        
+        if (json.status === 'success') {
+            const container = document.getElementById('live-news-feed');
+            container.innerHTML = ''; 
+            
+            json.data.forEach(item => {
+                const articleHTML = `
+                    <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-pink-500 p-3.5 rounded-r-xl hover:border-slate-700 transition">
+                        <h3 class="font-bold text-sm text-slate-200 line-clamp-2 mb-1.5">${item.title}</h3>
+                        <div class="flex justify-between items-center text-xs">
+                            <a href="${item.link}" target="_blank" class="text-pink-500 hover:underline">View Intel Source →</a>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', articleHTML);
+            });
+        }
+    } catch (error) {
+        console.log("Error loading live automation feed:", error);
+    }
+}
+window.addEventListener('DOMContentLoaded', loadLiveNews);
 </script>
 </body>
 </html>
