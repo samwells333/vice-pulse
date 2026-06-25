@@ -2,7 +2,7 @@ import os
 import urllib.request
 import json
 from flask import Flask, render_template, request, jsonify
-
+from scraper import get_live_updates
 # Attempt to load feedparser and google-genai securely for production
 try:
     import feedparser
@@ -86,7 +86,13 @@ def chat_endpoint():
     except Exception as e:
         # If rate-limited or quota hit, return LOCAL_FALLBACK so the client-side takes over seamlessly
         return jsonify({"reply": "LOCAL_FALLBACK"})
-
+@app.route('/api/updates', methods=['GET'])
+def api_updates():
+    # Run your engine to get the newest 3 headlines
+    headlines = get_live_updates()
+    
+    # Send them back to Vercel as clean, organized data
+    return jsonify({"status": "success", "data": headlines})
 if __name__ == '__main__':
     # Bind to port assigned by free cloud hosts like Render
     port = int(os.environ.get("PORT", 5000))
