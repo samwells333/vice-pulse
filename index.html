@@ -147,13 +147,17 @@
     </script>
 <script>
 async function loadLiveNews() {
+<script>
+async function loadLiveNews() {
     try {
         const response = await fetch('https://vice-pulse.onrender.com/api/updates');
         const json = await response.json();
+        
         if (json.status === 'success') {
             const container = document.getElementById('live-news-feed');
-            container.innerHTML = ''; 
+            container.innerHTML = ''; // Clear out the hardcoded placeholder item
             
+            // This is the loop that was missing!
             json.data.forEach(item => {
                 const articleHTML = `
                     <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-pink-500 p-3.5 rounded-r-xl hover:border-slate-700 transition">
