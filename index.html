@@ -153,7 +153,7 @@ async function loadLiveNews() {
         
         if (json.status === 'success') {
             const container = document.getElementById('live-news-feed');
-            container.innerHTML = ''; 
+            container.innerHTML = ''; // Clears the initial loading text once
             
             json.data.forEach(item => {
                 const articleHTML = `
@@ -164,6 +164,7 @@ async function loadLiveNews() {
                         </div>
                     </div>
                 `;
+                // Make sure this exact line is used to stack them:
                 container.insertAdjacentHTML('beforeend', articleHTML);
             });
         }
