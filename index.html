@@ -148,12 +148,39 @@
     document.getElementById("query-string").addEventListener("keypress", (e) => { if (e.key === "Enter") submitQuery(); });
     </script>
 <script>
+async function loadLiveNews() {
+    try {
+        const response = await fetch('https://vice-pulse.onrender.com/api/updates');
+        const json = await response.json();
+        
+        if (json.status === 'success') {
+            const container = document.getElementById('live-news-feed');
+            container.innerHTML = ''; 
+            
+            json.data.forEach(item => {
+                const articleHTML = `
+                    <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-pink-500 p-3.5 rounded-r-xl hover:border-slate-700 transition">
+                        <h3 class="font-bold text-sm text-slate-200 line-clamp-2 mb-1.5">${item.title}</h3>
+                        <div class="flex justify-between items-center text-xs">
+                            <a href="${item.link}" target="_blank" class="text-pink-500 hover:underline">View Intel Source →</a>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', articleHTML);
+            });
+        }
+    } catch (error) {
+        console.log("Error loading live automation feed:", error);
+    }
+}
+
 function updateGridTimers() {
     const now = new Date().getTime();
     const preOrderTarget = new Date("Jun 25, 2026 00:00:00").getTime();
     const launchTarget = new Date("Nov 19, 2026 00:00:00").getTime();
     const preDist = preOrderTarget - now;
     const launchDist = launchTarget - now;
+    
     if (preDist <= 0) {
         document.getElementById("preorder-timer").innerText = "LIVE NOW";
         document.getElementById("preorder-timer").className = "text-emerald-400 font-bold animate-pulse";
@@ -161,17 +188,25 @@ function updateGridTimers() {
         const h = Math.floor((preDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const m = Math.floor((preDist % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((preDist % (1000 * 60)) / 1000);
-        document.getElementById("preorder-timer").innerText = ;
+        // FIXED: Added the formatted hours/minutes/seconds string
+        document.getElementById("preorder-timer").innerText = `${h}h ${m}m ${s}s`;
     }
+    
     if (launchDist <= 0) {
         document.getElementById("launch-timer").innerText = "GAME LIVE";
     } else {
         const dL = Math.floor(launchDist / (1000 * 60 * 60 * 24));
-        document.getElementById("launch-timer").innerText = ;
+        // FIXED: Added the days remaining string
+        document.getElementById("launch-timer").innerText = `${dL} DAYS REMAINING`;
     }
 }
-setInterval(updateGridTimers, 1000);
-updateGridTimers();
+
+// Kick off both network data sync and real-time clocks on load
+window.addEventListener('DOMContentLoaded', () => {
+    loadLiveNews();
+    updateGridTimers();
+    setInterval(updateGridTimers, 1000);
+});
 </script>
 <script>
 async function loadLiveNews() {
